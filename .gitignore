@@ -27,3 +27,17 @@
 *.exe
 *.out
 *.app
+
+#Directory
+/cmake-build-debug
+*.txt
+.idea/.name
+.idea/codeStyleSettings.xml
+.idea/homework.iml
+.idea/markdown-navigator.xml
+.idea/markdown-navigator/
+.idea/misc.xml
+.idea/modules.xml
+.idea/vcs.xml
+.idea/workspace.xml
+
