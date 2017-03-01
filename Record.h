@@ -17,11 +17,11 @@ struct Cost {
 class Record
 {
 public:
-    Record();
-    Record(string new_category);
+    explicit Record();
+    explicit Record(string new_category);
     void append_record(string new_time, string new_comment, double new_money);
     void delete_record(int choice);
-    void print_records();
+    void print_record();
     void edit_record(int choice, string new_comment, double new_money);
 private:
     string category;

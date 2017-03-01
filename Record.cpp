@@ -32,17 +32,19 @@ void Record::delete_record(int choice)
     cost.pop_back();
 }
 
-void Record::print_records()
+void Record::print_record()
 {
-    cout << "          " << category << "      " << endl;
-    cout << "--------------------------------------" << endl;
-    for (int i = 0; i < cost.size(); i++) {
-        cout << i << " : " << cost[i].time << " "
-             << cost[i].money << " "
-             << cost[i].comment << endl;
+    if (cost.size() > 0) {
+        cout << "----------" << category << "----------" << endl;
+        for (int i = 0; i < cost.size(); i++) {
+            cout << i << " : " << cost[i].time << " "
+                 << cost[i].money << " "
+                 << cost[i].comment << endl;
+        }
+        cout << endl;
     }
-    cout << "--------------------------------------" << endl;
 }
+
 void Record::edit_record(int choice, string new_comment, double new_money)
 {
     cost[choice].comment = new_comment;
