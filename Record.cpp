@@ -3,8 +3,6 @@
 //
 
 #include "Record.h"
-#include <iostream>
-using std::cout;
 
 Record::Record()
 {
@@ -34,12 +32,17 @@ void Record::delete_record(int choice)
 
 void Record::print_record()
 {
+    cout.setf(ios::fixed);
+    cout.setf(ios::showpoint);
+    cout.precision(2);
+
     if (cost.size() > 0) {
-        cout << "----------" << category << "----------" << endl;
+        cout << "-------------------------------" << category << "-------------------------------" << endl;
         for (int i = 0; i < cost.size(); i++) {
-            cout << i << " : " << cost[i].time << " "
-                 << cost[i].money << " "
-                 << cost[i].comment << endl;
+            cout << setw(3) << i << ": "
+                 << setw(25) << cost[i].time
+                 << setw(10) << cost[i].money << " "
+                 << left << setw(30) << cost[i].comment << endl;
         }
         cout << endl;
     }
