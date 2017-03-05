@@ -13,7 +13,7 @@ string get_time()
     string time_str;
     time_str.assign(asctime(gmtime(&now)));  // 时间char类型转换到string类型
 
-    string new_time_str = time_str.substr(0, time_str.size() - 1);
+    string new_time_str = time_str.substr(0, time_str.size() - 1); // 删除最后一个回车符
     return new_time_str;
 }
 
@@ -79,7 +79,7 @@ int select_function_menu()
     return choice;
 }
 
-void edit_records(vector<Category>& category_records)
+void edit_item(vector<Category>& category_records)
 {
     int category_choice = select_category_menu();
 
@@ -98,7 +98,7 @@ void edit_records(vector<Category>& category_records)
     category_records[category_choice].edit_record(index_of_item, new_comment, new_money);
 
 }
-void append_cost_records(vector<Category>& records)
+void append_item(vector<Category>& records)
 {
     int category_choice = select_category_menu();
     string new_time = get_time();
@@ -118,13 +118,13 @@ void append_cost_records(vector<Category>& records)
     records[category_choice].append_record(new_time, new_comment, new_money);
 }
 
-void print_category_records(const vector<Category>& records)
+void print_items(const vector<Category>& records)
 {
     int category_choice = select_category_menu();
     records[category_choice].print_records();
 }
 
-void delete_category_record(vector<Category>& records)
+void delete_item(vector<Category>& records)
 {
     int category_choice = select_category_menu();
     records[category_choice].print_records();
@@ -136,7 +136,7 @@ void delete_category_record(vector<Category>& records)
     records[category_choice].delete_record(index_of_item);
 }
 
-void print_all_records(const vector<Category>& records)
+void print_all_items(const vector<Category>& records)
 {
     for (int i = 0; i < records.size(); i++) {
         records[i].print_records();
@@ -183,23 +183,23 @@ int main()
 
         switch (function_choice) {
             case 0 : {
-                append_cost_records(records);
+                append_item(records);
                 break;
             }
             case 1: {
-                print_category_records(records);
+                print_items(records);
                 break;
             }
             case 2: {
-                print_all_records(records);
+                print_all_items(records);
                 break;
             }
             case 3: {
-                edit_records(records);
+                edit_item(records);
                 break;
             }
             case 4: {
-                delete_category_record(records);
+                delete_item(records);
                 break;
             }
             case 5: {
