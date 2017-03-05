@@ -10,24 +10,26 @@
 #include <iomanip>
 using namespace std;
 
-struct Cost {
+struct item {
     string time;
     string comment;
     double money;
 };
 
-class Record
+class Category
 {
 public:
-    explicit Record();
-    explicit Record(string new_category);
+    explicit Category();
+    explicit Category(string new_category);
     void append_record(string new_time, string new_comment, double new_money);
-    void delete_record(int choice);
-    void print_record();
-    void edit_record(int choice, string new_comment, double new_money);
+    void delete_record(int index_of_item);
+    void print_records() const;
+    void edit_record(int index_of_item, string new_comment, double new_money);
+    double get_category_costs() const;
+    string get_category_name() const;
 private:
-    string category;
-    vector<Cost> cost;
+    string name;
+    vector<item> items;
 };
 
 
