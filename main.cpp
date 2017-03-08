@@ -53,12 +53,11 @@ int select_category_menu()
     cout << "         2.   Commodity" << endl;
     cout << "         3.   Coat" << endl;
     cout << "         4.   Entertainment" << endl;
-    cout << "         5.   Delete Category" << endl;
-    cout << "         6.   Family" << endl;
-    cout << "         7.   Others" << endl;
+    cout << "         5.   Family" << endl;
+    cout << "         6.   Others" << endl;
     cout << endl;
 
-    int choice = choose_menu("Enter an integer between 0 and 7 as category selection", 0, 7);
+    int choice = choose_menu("Enter an integer between 0 and 7 as category selection", 0, 6);
     return choice;
 }
 
@@ -79,7 +78,7 @@ int select_function_menu()
     return choice;
 }
 
-void edit_item(vector<Category>& category_records)
+void edit_record(vector<Category>& records)
 {
     int category_choice = select_category_menu();
 
@@ -95,10 +94,10 @@ void edit_item(vector<Category>& category_records)
     double new_money;
     cin >> new_money;
 
-    category_records[category_choice].edit_record(index_of_item, new_comment, new_money);
+    records[category_choice].edit_record(index_of_item, new_comment, new_money);
 
 }
-void append_item(vector<Category>& records)
+void append_record(vector<Category>& records)
 {
     int category_choice = select_category_menu();
     string new_time = get_time();
@@ -118,13 +117,13 @@ void append_item(vector<Category>& records)
     records[category_choice].append_record(new_time, new_comment, new_money);
 }
 
-void print_items(const vector<Category>& records)
+void print_records_of_category(const vector<Category>& records)
 {
     int category_choice = select_category_menu();
     records[category_choice].print_records();
 }
 
-void delete_item(vector<Category>& records)
+void delete_record(vector<Category>& records)
 {
     int category_choice = select_category_menu();
     records[category_choice].print_records();
@@ -136,7 +135,7 @@ void delete_item(vector<Category>& records)
     records[category_choice].delete_record(index_of_item);
 }
 
-void print_all_items(const vector<Category>& records)
+void print_all_records(const vector<Category>& records)
 {
     for (int i = 0; i < records.size(); i++) {
         records[i].print_records();
@@ -160,7 +159,7 @@ void statistics(const vector<Category>& records)
         if (category_costs > 0) {
             string category_name = records[i].get_category_name();
             cout << "There is " << category_costs << " RMB costs in category " << category_name
-                 << " and it takes " << category_costs / total_costs * 100 << " percent in total costs\n";
+                 << " and it takes " << category_costs / total_costs * 100 << "% in total costs\n";
         }
     }
 }
@@ -183,23 +182,23 @@ int main()
 
         switch (function_choice) {
             case 0 : {
-                append_item(records);
+                append_record(records);
                 break;
             }
             case 1: {
-                print_items(records);
+                print_records_of_category(records);
                 break;
             }
             case 2: {
-                print_all_items(records);
+                print_all_records(records);
                 break;
             }
             case 3: {
-                edit_item(records);
+                edit_record(records);
                 break;
             }
             case 4: {
-                delete_item(records);
+                delete_record(records);
                 break;
             }
             case 5: {
