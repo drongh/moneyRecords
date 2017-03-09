@@ -213,7 +213,32 @@ void create_category(vector<Category>& records)
 
 void write_to_file(vector<Category> records)
 {
-    
+
+}
+
+void read_from_file(vector<Category> records)
+{
+    ifstream in_file("data.txt");
+
+    if (in_file.fail())
+    {
+        cout << "There is no data.txt file." << endl;
+        return;
+    }
+
+    string line;
+    getline(in_file, line);
+
+    if (line.substr(0, 8) == "category")
+    {
+        Category category(line.substr(8, line.size() - 1));
+        records.push_back(category);
+    }
+
+
+
+
+    in_file.close();
 }
 
 int main()
