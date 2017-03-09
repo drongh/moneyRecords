@@ -1,4 +1,5 @@
 #include <iostream>
+#include <fstream>
 #include <string>
 #include <ctime>
 #include <vector>
@@ -70,16 +71,23 @@ int select_function_menu()
     cout << "       3.   Edit Records" << endl;
     cout << "       4.   Delete Records" << endl;
     cout << "       5.   Statistics" << endl;
-    cout << "       6.   Read From Files" << endl;
-    cout << "       7.   Write To Files" << endl;
-    cout << "       8.   Exit" << endl;
+    cout << "       6.   Create Category" << endl;
+    cout << "       7.   Read From Files" << endl;
+    cout << "       8.   Write To Files" << endl;
+    cout << "       9.   Exit" << endl;
     cout << endl;
-    int choice = choose_menu("Enter an integer between 0 and 8 as function selection", 0, 8);
+    int choice = choose_menu("Enter an integer between 0 and 8 as function selection", 0, 9);
     return choice;
 }
 
 void edit_record(vector<Category>& records)
 {
+
+    if (records.size() == 0) {
+        cout << "There is no any record to manipulate, Please create it." << endl;
+        return;
+    }
+
     int category_choice = select_category_menu();
 
     cout << "Please input index of item to edit: ";
@@ -99,6 +107,12 @@ void edit_record(vector<Category>& records)
 }
 void append_record(vector<Category>& records)
 {
+
+    if (records.size() == 0) {
+        cout << "There is no any category to manipulate, Please create it." << endl;
+        return;
+    }
+
     int category_choice = select_category_menu();
     string new_time = get_time();
 
@@ -119,12 +133,24 @@ void append_record(vector<Category>& records)
 
 void print_records_of_category(const vector<Category>& records)
 {
+
+    if (records.size() == 0) {
+        cout << "There is no any record to manipulate, Please create it." << endl;
+        return;
+    }
+
     int category_choice = select_category_menu();
     records[category_choice].print_records();
 }
 
 void delete_record(vector<Category>& records)
 {
+
+    if (records.size() == 0) {
+        cout << "There is no any record to manipulate, Please create it." << endl;
+        return;
+    }
+
     int category_choice = select_category_menu();
     records[category_choice].print_records();
 
@@ -137,6 +163,12 @@ void delete_record(vector<Category>& records)
 
 void print_all_records(const vector<Category>& records)
 {
+
+    if (records.size() == 0) {
+        cout << "There is no any record to manipulate, Please create it." << endl;
+        return;
+    }
+
     for (int i = 0; i < records.size(); i++) {
         records[i].print_records();
     }
@@ -144,6 +176,12 @@ void print_all_records(const vector<Category>& records)
 
 void statistics(const vector<Category>& records)
 {
+
+    if (records.size() == 0) {
+        cout << "There is no any record to manipulate, Please create it." << endl;
+        return;
+    }
+
     double total_costs = 0;
     for (int i = 0; i < records.size(); i++) {
         double category_costs = records[i].get_category_costs();
@@ -162,6 +200,20 @@ void statistics(const vector<Category>& records)
                  << " and it takes " << category_costs / total_costs * 100 << "% in total costs\n";
         }
     }
+}
+
+void create_category(vector<Category>& records)
+{
+    cout << "Please input an name to create category: ";
+    string category_name;
+    getline(cin, category_name);
+    Category category(category_name);
+    records.push_back(category);
+}
+
+void write_to_file(vector<Category> records)
+{
+    
 }
 
 int main()
@@ -205,13 +257,16 @@ int main()
                 statistics(records);
                 break;
             }
-            case 6:
+            case 6: {
+                create_category(records);
                 break;
+            }
             case 7:
                 break;
             case 8:
-                more = false;
                 break;
+            case 9:
+                more = false;
             default:
                 cout << "Never get here!!!";
                 break;
