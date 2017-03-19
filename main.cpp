@@ -118,6 +118,8 @@ void edit_record(vector<Category>& records)
     double new_money;
     cin >> new_money;
 
+    getline(cin, remainder);
+
     records[category_choice].edit_record(index_of_item, new_comment, new_money);
 
 }
@@ -176,6 +178,9 @@ void delete_record(vector<Category>& records)
     cout << "which item do you want to delete? Please input an index: ";
     int index_of_item;
     cin >> index_of_item;
+
+    string remainder;
+    getline(cin, remainder);
 
     records[category_choice].delete_record(index_of_item);
 }
@@ -324,6 +329,42 @@ vector<Category> read_from_file()
     return records;
 
 }
+
+
+/* todo need help. How to write to file with binary format.
+ * Next codes are wrong.
+ * 
+*/
+
+
+//void write_to_file(vector<Category> records)
+//{
+//    fstream output("money_records.dat", ios::out | ios::binary);
+//
+//    int records_size = sizeof(records);
+//    output.write(reinterpret_cast<char*>(&records_size), sizeof(records_size));
+//    output.write(reinterpret_cast<char*>(&records[0]), sizeof(records));
+//
+//    output.close();
+//
+//    cout << "Write Done" << endl;
+//}
+//
+//vector<Category> read_from_file()
+//{
+//    fstream input("money_records.dat", ios::in | ios::binary);
+//
+//    int records_size;
+//    input.read(reinterpret_cast<char*>(&records_size), sizeof(records_size));
+//
+//    vector<Category> records(7);
+//    input.read(reinterpret_cast<char*>(&records[0]), records_size);
+//
+//    cout << "Read Done" << endl;
+//
+//    return records;
+//
+//}
 
 int main()
 {
