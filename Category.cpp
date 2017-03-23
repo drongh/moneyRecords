@@ -24,11 +24,9 @@ void Category::append_record(string new_time, string new_comment, double new_mon
 
 void Category::delete_record(int index_of_item)
 {
-    if (index_of_item >= 0 && index_of_item < items.size()) {
-        for (int i = index_of_item; i < items.size() - 1; i++) {
-            items[i] = items[i + 1];
-        }
-        items.pop_back();
+    if (index_of_item >= 0 && index_of_item < items.size())
+    {
+        items.erase(items.begin() + index_of_item);
     }
 }
 
@@ -47,26 +45,31 @@ void Category::print_a_record(int index) const
 
 void Category::print_records() const
 {
-    if (items.size() > 0) {
+    if (items.size() > 0)
+    {
         cout << "-------------------------------" << name << "-------------------------------" << endl;
-        for (int i = 0; i < items.size(); i++) {
+        for (int i = 0; i < items.size(); i++)
+        {
             print_a_record(i);
         }
         cout << endl;
     }
 }
 
-
 void Category::edit_record(int index_of_item, string new_comment, double new_money)
 {
-    items[index_of_item].comment = new_comment;
-    items[index_of_item].money = new_money;
+    if (index_of_item >= 0 && index_of_item < items.size())
+    {
+        items[index_of_item].comment = new_comment;
+        items[index_of_item].money = new_money;
+    }
 }
 
 double Category::get_category_costs() const
 {
     double money_in_category = 0;
-    for (int i = 0; i < items.size(); i++) {
+    for (int i = 0; i < items.size(); i++)
+    {
         money_in_category += items[i].money;
     }
     return money_in_category;

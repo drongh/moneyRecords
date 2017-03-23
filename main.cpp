@@ -26,6 +26,7 @@ string get_time()
     return time_str.substr(0, time_str.size() - 1);
 }
 
+
 int choose_menu(string prompt, int min_range, int max_range)
 {
     string choice_str;
@@ -35,22 +36,22 @@ int choose_menu(string prompt, int min_range, int max_range)
         cout << prompt << ": ";
         getline(cin, choice_str);
 
-        if (choice_str.size() == 1)
+        if (choice_str.size() == 1 && isdigit(choice_str[0]))
         {
-            if (min_range <= isalnum(choice_str[0]) || isalnum(choice_str[0]) <= max_range)
+            int choice = atoi(choice_str.c_str());
+            if (min_range <= choice && choice <= max_range)
             {
-                return atoi(choice_str.c_str());
+                return choice;
             }
             else
             {
-                cout << "The number you entered is out of range!!! Enter again.." << endl;
+                cout << "The number you entered is out of range!!!" << endl;
             }
         }
         else
         {
             cout << "Wrong input. Please input a number between "
                  << min_range << " and " << max_range << "!!!" << endl;
-            continue;
         }
     }
 }
@@ -58,33 +59,34 @@ int choose_menu(string prompt, int min_range, int max_range)
 int select_category_menu()
 {
     cout << "--------Category Selection Menu--------" << endl;
-    cout << "         0.   Dinner" << endl;
-    cout << "         1.   Traffic" << endl;
-    cout << "         2.   Commodity" << endl;
-    cout << "         3.   Coat" << endl;
-    cout << "         4.   Entertainment" << endl;
-    cout << "         5.   Family" << endl;
-    cout << "         6.   Others" << endl;
+    cout << "         1.   Dinner" << endl;
+    cout << "         2.   Traffic" << endl;
+    cout << "         3.   Commodity" << endl;
+    cout << "         4.   Coat" << endl;
+    cout << "         5.   Entertainment" << endl;
+    cout << "         6.   Family" << endl;
+    cout << "         7.   Others" << endl;
+    cout << "         8.   Back" << endl;
     cout << endl;
 
-    int choice = choose_menu("Enter an integer between 0 and 6 as category selection", 0, 6);
+    int choice = choose_menu("Enter an integer between 1 and 8 as category selection", 1, 8);
     return choice;
 }
 
 int select_function_menu()
 {
     cout << "--------Function Selection Menu--------" << endl;
-    cout << "       0.   Append item Records" << endl;
-    cout << "       1.   Print Category Records" << endl;
-    cout << "       2.   Print All Records" << endl;
-    cout << "       3.   Edit Records" << endl;
-    cout << "       4.   Delete Records" << endl;
-    cout << "       5.   Statistics" << endl;
-    cout << "       6.   Read From Files" << endl;
-    cout << "       7.   Write To Files" << endl;
-    cout << "       8.   Exit" << endl;
+    cout << "       1.   Append item Records" << endl;
+    cout << "       2.   Print Category Records" << endl;
+    cout << "       3.   Print All Records" << endl;
+    cout << "       4.   Edit Records" << endl;
+    cout << "       5.   Delete Records" << endl;
+    cout << "       6.   Statistics" << endl;
+    cout << "       7.   Read From Files" << endl;
+    cout << "       8.   Write To Files" << endl;
+    cout << "       9.   Exit" << endl;
     cout << endl;
-    int choice = choose_menu("Enter an integer between 0 and 8 as function selection", 0, 8);
+    int choice = choose_menu("Enter an integer between 1 and 9 as function selection", 1, 9);
     return choice;
 }
 
@@ -98,13 +100,17 @@ void edit_record(vector<Category>& records)
     }
 
     int category_choice = select_category_menu();
+    if (category_choice == 8)
+    {
+        return;
+    }
 
     cout << "Please input index of item to edit: ";
     int index_of_item;
     cin >> index_of_item;
 
     cout << "In category " << records[category_choice].get_category_name() << " this item will be edited: " << endl;
-    records[category_choice].print_a_record(index_of_item);
+    records[category_choice - 1].print_a_record(index_of_item);
 
     cout << "Please input comment for that item: ";
     string new_comment;
@@ -120,7 +126,7 @@ void edit_record(vector<Category>& records)
 
     getline(cin, remainder);
 
-    records[category_choice].edit_record(index_of_item, new_comment, new_money);
+    records[category_choice - 1].edit_record(index_of_item, new_comment, new_money);
 
 }
 
@@ -134,6 +140,11 @@ void append_record(vector<Category>& records)
     }
 
     int category_choice = select_category_menu();
+    if (category_choice == 8)
+    {
+        return;
+    }
+
     string new_time = get_time();
 
     cout << "Please input item comments: ";
@@ -147,7 +158,7 @@ void append_record(vector<Category>& records)
     string remainder;
     getline(cin, remainder);
 
-    records[category_choice].append_record(new_time, new_comment, new_money);
+    records[category_choice - 1].append_record(new_time, new_comment, new_money);
 }
 
 void print_records_of_category(const vector<Category>& records)
@@ -160,7 +171,12 @@ void print_records_of_category(const vector<Category>& records)
     }
 
     int category_choice = select_category_menu();
-    records[category_choice].print_records();
+
+    if (category_choice == 8)
+    {
+        return;
+    }
+    records[category_choice - 1].print_records();
 }
 
 void delete_record(vector<Category>& records)
@@ -173,7 +189,12 @@ void delete_record(vector<Category>& records)
     }
 
     int category_choice = select_category_menu();
-    records[category_choice].print_records();
+    if (category_choice == 8)
+    {
+        return;
+    }
+
+    records[category_choice - 1].print_records();
 
     cout << "which item do you want to delete? Please input an index: ";
     int index_of_item;
@@ -182,7 +203,7 @@ void delete_record(vector<Category>& records)
     string remainder;
     getline(cin, remainder);
 
-    records[category_choice].delete_record(index_of_item);
+    records[category_choice - 1].delete_record(index_of_item);
 }
 
 void print_all_records(const vector<Category>& records)
@@ -330,42 +351,6 @@ vector<Category> read_from_file()
 
 }
 
-
-/* todo need help. How to write to file with binary format.
- * Next codes are wrong.
- * 
-*/
-
-
-//void write_to_file(vector<Category> records)
-//{
-//    fstream output("money_records.dat", ios::out | ios::binary);
-//
-//    int records_size = sizeof(records);
-//    output.write(reinterpret_cast<char*>(&records_size), sizeof(records_size));
-//    output.write(reinterpret_cast<char*>(&records[0]), sizeof(records));
-//
-//    output.close();
-//
-//    cout << "Write Done" << endl;
-//}
-//
-//vector<Category> read_from_file()
-//{
-//    fstream input("money_records.dat", ios::in | ios::binary);
-//
-//    int records_size;
-//    input.read(reinterpret_cast<char*>(&records_size), sizeof(records_size));
-//
-//    vector<Category> records(7);
-//    input.read(reinterpret_cast<char*>(&records[0]), records_size);
-//
-//    cout << "Read Done" << endl;
-//
-//    return records;
-//
-//}
-
 int main()
 {
     vector<Category> records;
@@ -385,55 +370,58 @@ int main()
 
         switch (function_choice)
         {
-            case 0 :
+            case 1 :
             {
                 append_record(records);
                 break;
             }
-            case 1:
+            case 2:
             {
                 print_records_of_category(records);
                 break;
             }
-            case 2:
+            case 3:
             {
                 print_all_records(records);
                 break;
             }
-            case 3:
+            case 4:
             {
                 edit_record(records);
                 break;
             }
-            case 4:
+            case 5:
             {
                 delete_record(records);
                 break;
             }
-            case 5:
+            case 6:
             {
                 statistics(records);
                 break;
             }
-            case 6:
+            case 7:
             {
                 records = read_from_file();
                 break;
             }
-            case 7:
+            case 8:
             {
                 write_to_file(records);
                 break;
             }
-            case 8:
+            case 9:
             {
                 more = false;
                 cout << "Bye Bye" << endl;
                 break;
             }
             default:
+            {
+                more = false;
                 cout << "Never get here!!!" << endl;
                 break;
+            }
         }
     }
 
