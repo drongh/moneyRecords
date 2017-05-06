@@ -142,7 +142,7 @@ void print_all_records(const vector<shared_ptr<Category>>& records) {
         return;
     }
 
-    for (int i = 0; i < records.size(); i++) {
+    for (int i = 0; i < records.size(); ++i) {
         records[i]->print_records();
     }
 }
@@ -155,7 +155,7 @@ void statistics(const vector<shared_ptr<Category>>& records) {
     }
 
     double total_costs = 0;
-    for (int i = 0; i < records.size(); i++) {
+    for (int i = 0; i < records.size(); ++i) {
         double category_costs = records[i]->get_category_costs();
         total_costs += category_costs;
     }
@@ -164,7 +164,7 @@ void statistics(const vector<shared_ptr<Category>>& records) {
     cout.setf(ios::showpoint);
     cout.precision(2);
 
-    for (int i = 0; i < records.size(); i++) {
+    for (int i = 0; i < records.size(); ++i) {
         double category_costs = records[i]->get_category_costs();
         if (category_costs > 0) {
             string category_name = records[i]->get_category_name();
@@ -174,7 +174,7 @@ void statistics(const vector<shared_ptr<Category>>& records) {
     }
 }
 
-void write_category_to_file(shared_ptr<Category> p_category) {
+void write_category_to_file(const shared_ptr<Category>& p_category) {
     string filename = p_category->get_category_name() + ".txt";
     fstream output(filename.c_str(), ios::out);
 
@@ -188,15 +188,15 @@ void write_category_to_file(shared_ptr<Category> p_category) {
     output.close();
 }
 
-void write_to_file(vector<shared_ptr<Category>> records) {
+void write_to_file(const vector<shared_ptr<Category>>& records) {
 
-    for (int i = 0; i < records.size(); i++) {
+    for (int i = 0; i < records.size(); ++i) {
         write_category_to_file(records[i]);
     }
     cout << "Done" << endl;
 }
 
-Category* read_category_from_file(string category_name) {
+shared_ptr<Category> read_category_from_file(const string& category_name) {
     string filename = category_name + ".txt";
     fstream input(filename.c_str(), ios::in);
 
@@ -206,9 +206,10 @@ Category* read_category_from_file(string category_name) {
         exit(1);
     }
 
-    Category* p_category = new Category(category_name);
+    auto p_category = make_shared<Category>(category_name);
 
-    string line = getLine();
+    string line;
+    getline(input, line);
 
     string time_cost;
     string money_str;
@@ -233,16 +234,14 @@ Category* read_category_from_file(string category_name) {
     return p_category;
 }
 
-// 返回share_ptr导致读取失败
-vector<shared_ptr<Category>> read_from_file() {
-    vector<string> category_name{"Dinner", "Traffic", "Commodity", "Coats", "Entertainment", "Family", "Others"};
+vector<shared_ptr<Category>> read_from_file(const vector<string>& category_name) {
     vector<shared_ptr<Category>> records;
 
     for (const auto& name : category_name) {
-        shared_ptr<Category> ptr{read_category_from_file(name)};
-        records.push_back(ptr);
+        auto p_category = read_category_from_file(name);
+        records.emplace_back(p_category);
     }
-    return records;
+    return move(records);
 }
 
 int main() {
@@ -250,10 +249,9 @@ int main() {
     vector<string> category_name{"Dinner", "Traffic", "Commodity", "Coats", "Entertainment", "Family", "Others"};
 
     vector<shared_ptr<Category>> records;
-
     for (const auto& name : category_name) {
-        shared_ptr<Category> ptr{new Category(name)};
-        records.push_back(ptr);
+        auto p_category = make_shared<Category>(name);
+        records.emplace_back(p_category);
     }
 
     bool more = true;
@@ -287,7 +285,7 @@ int main() {
                 break;
             }
             case 6: {
-                records = read_from_file();
+                records = read_from_file(category_name);
                 break;
             }
             case 7: {
