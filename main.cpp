@@ -6,10 +6,9 @@
 #include <memory>
 
 #include "simpio.h"
+#include "Category.h"
 
 using namespace std;
-
-#include "Category.h"
 
 string get_time() {
     time_t now;
@@ -142,7 +141,7 @@ void print_all_records(const vector<shared_ptr<Category>>& records) {
         return;
     }
 
-    for (int i = 0; i < records.size(); ++i) {
+    for (auto i = 0; i < records.size(); ++i) {
         records[i]->print_records();
     }
 }
@@ -155,7 +154,7 @@ void statistics(const vector<shared_ptr<Category>>& records) {
     }
 
     double total_costs = 0;
-    for (int i = 0; i < records.size(); ++i) {
+    for (auto i = 0; i < records.size(); ++i) {
         double category_costs = records[i]->get_category_costs();
         total_costs += category_costs;
     }
@@ -179,7 +178,7 @@ void write_category_to_file(const shared_ptr<Category>& p_category) {
     fstream output(filename.c_str(), ios::out);
 
     vector<item> items = p_category->get_category_items();
-    for (int i = 0; i < items.size(); i++) {
+    for (auto i = 0; i < items.size(); ++i) {
         string time_cost = items[i].time_cost;
         double money = items[i].money;
         string comment = items[i].comment;
@@ -190,13 +189,13 @@ void write_category_to_file(const shared_ptr<Category>& p_category) {
 
 void write_to_file(const vector<shared_ptr<Category>>& records) {
 
-    for (int i = 0; i < records.size(); ++i) {
+    for (auto i = 0; i < records.size(); ++i) {
         write_category_to_file(records[i]);
     }
     cout << "Done" << endl;
 }
 
-shared_ptr<Category> read_category_from_file(const string& category_name) {
+unique_ptr<Category> read_category_from_file(const string& category_name) {
     string filename = category_name + ".txt";
     fstream input(filename.c_str(), ios::in);
 
@@ -206,27 +205,23 @@ shared_ptr<Category> read_category_from_file(const string& category_name) {
         exit(1);
     }
 
-    auto p_category = make_shared<Category>(category_name);
+    auto p_category = make_unique<Category>(category_name);
 
     string line;
     getline(input, line);
 
-    string time_cost;
-    string money_str;
-    double money;
-    string comment;
 
     while (!input.eof()) {
 
         size_t first_space_index = line.find('#');
         size_t second_space_index = line.find('#', first_space_index + 1);
 
-        time_cost = line.substr(0, first_space_index);
+        string time_cost = line.substr(0, first_space_index);
 
-        money_str = line.substr(first_space_index + 1, second_space_index - first_space_index - 1);
-        money = atof(money_str.c_str());
+        string money_str = line.substr(first_space_index + 1, second_space_index - first_space_index - 1);
+        double money = atof(money_str.c_str());
 
-        comment = line.substr(second_space_index + 1);
+        string comment = line.substr(second_space_index + 1);
         p_category->append_record(time_cost, comment, money);
 
         getline(input, line);
@@ -238,15 +233,15 @@ vector<shared_ptr<Category>> read_from_file(const vector<string>& category_name)
     vector<shared_ptr<Category>> records;
 
     for (const auto& name : category_name) {
-        auto p_category = read_category_from_file(name);
+        auto p_category = shared_ptr<Category>(read_category_from_file(name));
         records.emplace_back(p_category);
     }
-    return move(records);
+    return records;
 }
 
 int main() {
 
-    vector<string> category_name{"Dinner", "Traffic", "Commodity", "Coats", "Entertainment", "Family", "Others"};
+    const vector<string> category_name{"Dinner", "Traffic", "Commodity", "Coats", "Entertainment", "Family", "Others"};
 
     vector<shared_ptr<Category>> records;
     for (const auto& name : category_name) {
